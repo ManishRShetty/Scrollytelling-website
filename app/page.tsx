@@ -145,7 +145,7 @@ export default function Home() {
               color: "white",
             }}
           >
-            The End
+            The Black Hole.
           </h2>
           <p
             style={{
