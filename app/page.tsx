@@ -1,7 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ScrollVideo from "./components/ScrollVideo";
+import RulesSection from "./components/RulesSection";
+import EventInfo from "./components/EventInfo";
+import Footer from "./components/Footer";
+import RegisterCTA from "./components/RegisterCTA";
 
 /** Maps scroll progress [0–1] to opacity using enter/peak/exit/leave thresholds */
 function calcOpacity(
@@ -32,15 +36,29 @@ const fixedSection: React.CSSProperties = {
 
 export default function Home() {
   const [scroll, setScroll] = useState(0);
+  const [btnHovered, setBtnHovered] = useState(false);
+  const [ctaVisible, setCtaVisible] = useState(false);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      setScroll(maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0);
+      // Clamp to just the 400vh video spacer — not the full page height
+      const maxScroll = 4 * window.innerHeight;
+      setScroll(Math.min(window.scrollY / maxScroll, 1));
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setCtaVisible(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   // Each section's visible scroll window (0–1)
@@ -78,19 +96,21 @@ export default function Home() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Scroll to Explore
+            HackMatrix
           </h1>
           <p
             style={{
-              marginTop: "1.5rem",
-              fontSize: "1.15rem",
-              fontWeight: 300,
-              color: "rgba(255,255,255,0.5)",
-              maxWidth: "420px",
+              marginTop: "0.75rem",
+              fontSize: "1rem",
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.55)",
+              maxWidth: "480px",
               lineHeight: 1.6,
+              letterSpacing: "0.02em",
+              textTransform: "uppercase",
             }}
           >
-            Experience the story frame by frame as you scroll down
+            Organized by Nexus SIT &amp; CSBS
           </p>
 
           {/* Scroll indicator */}
@@ -136,10 +156,10 @@ export default function Home() {
               letterSpacing: "-0.01em",
             }}
           >
-            Every frame tells a story.
+            A 7 Hour Hackathon.
             <br />
             <span style={{ color: "rgba(255,255,255,0.35)" }}>
-              Keep scrolling to uncover the narrative.
+              Build. Innovate. Compete.
             </span>
           </p>
         </section>
@@ -154,7 +174,7 @@ export default function Home() {
               color: "white",
             }}
           >
-            The Black Hole.
+            The clock is running.
           </h2>
           <p
             style={{
@@ -164,7 +184,7 @@ export default function Home() {
               fontWeight: 300,
             }}
           >
-            Scroll back up to replay
+            Register before time runs out.
           </p>
         </section>
       </div>
@@ -175,6 +195,64 @@ export default function Home() {
           50%       { transform: translateY(8px); }
         }
       `}</style>
+
+      {/* Fixed Register Now button — fades in after video completes */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "36px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 30,
+          opacity: scroll >= 1 && !ctaVisible ? 1 : 0,
+          pointerEvents: scroll >= 1 && !ctaVisible ? "auto" : "none",
+          transition: "opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        }}
+      >
+        <button
+          onMouseEnter={() => setBtnHovered(true)}
+          onMouseLeave={() => setBtnHovered(false)}
+          style={{
+            background: btnHovered ? "#fff" : "#0A84FF",
+            color: btnHovered ? "#000" : "#fff",
+            border: "none",
+            borderRadius: "980px",
+            padding: "14px 36px",
+            fontSize: "0.95rem",
+            fontWeight: 600,
+            letterSpacing: "-0.01em",
+            cursor: "pointer",
+            boxShadow: btnHovered
+              ? "0 0 40px rgba(10,132,255,0.6)"
+              : "0 0 24px rgba(10,132,255,0.3)",
+            transition: "background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease",
+            transform: btnHovered ? "scale(1.05)" : "scale(1)",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+          }}
+        >
+          Register Now
+        </button>
+      </div>
+
+      {/* Event info — venue, date, time */}
+      <div style={{ position: "relative", zIndex: 20 }}>
+        <EventInfo />
+      </div>
+
+      {/* Rules section */}
+      <div style={{ position: "relative", zIndex: 20 }}>
+        <RulesSection />
+      </div>
+
+      {/* Register CTA — after all sections */}
+      <div ref={ctaRef} style={{ position: "relative", zIndex: 20 }}>
+        <RegisterCTA label="What are you waiting for?" />
+      </div>
+
+      {/* Footer */}
+      <div style={{ position: "relative", zIndex: 20 }}>
+        <Footer />
+      </div>
     </>
   );
 }
