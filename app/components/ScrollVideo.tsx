@@ -160,7 +160,7 @@ export default function ScrollVideo() {
             style={{
               width: `${progress}%`,
               height: "100%",
-              background: "linear-gradient(90deg, #6366f1, #a855f7, #ec4899)",
+              background: "#fff",
               borderRadius: "1px",
               transition: "width 0.3s ease",
             }}

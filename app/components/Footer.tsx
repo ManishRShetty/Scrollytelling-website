@@ -27,22 +27,41 @@ export default function Footer() {
                     }}
                 >
                     {/* Logos */}
-                    <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-                        <div style={{
-                            width: "56px", height: "56px", borderRadius: "12px",
-                            border: "1px dashed #3A3A3C", display: "flex",
-                            alignItems: "center", justifyContent: "center",
-                            fontSize: "10px", color: "#48484A", letterSpacing: "0.05em",
-                        }}>
-                            NEXUS
+                    <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                            <a
+                                href="https://www.nexusclubs.in"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    width: "48px",
+                                    height: "48px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                    transition: "opacity 0.2s ease",
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.opacity = "0.7"}
+                                onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+                            >
+                                <img src="/nexus.svg" alt="Nexus Logo" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+                            </a>
+                            <span style={{
+                                fontSize: "14px",
+                                fontWeight: 600,
+                                color: "#fff",
+                                letterSpacing: "0.03em",
+                            }}>
+                                NEXUS SIT
+                            </span>
                         </div>
-                        <div style={{
-                            width: "56px", height: "56px", borderRadius: "12px",
-                            border: "1px dashed #3A3A3C", display: "flex",
-                            alignItems: "center", justifyContent: "center",
-                            fontSize: "10px", color: "#48484A", letterSpacing: "0.05em",
-                        }}>
-                            CSBS
+
+                        {/* Divider */}
+                        <div style={{ width: "1px", height: "24px", background: "#3A3A3C" }} />
+
+                        <div style={{ width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <img src="/cb.svg" alt="CSBS Logo" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", filter: "invert(1) brightness(0.9)" }} />
                         </div>
                     </div>
 

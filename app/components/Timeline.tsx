@@ -89,30 +89,30 @@ export default function Timeline() {
                     padding: "48px 8vw",
                 }}
             >
-                {/* Header */}
-                <p style={{
-                    position: "absolute",
-                    top: "44px",
-                    left: "8vw",
-                    fontSize: "11px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "#48484A",
-                    margin: 0,
-                }}>Schedule</p>
-
-                {/* Counter */}
-                <p style={{
-                    position: "absolute",
-                    bottom: "40px",
-                    right: "8vw",
-                    fontSize: "14px",
-                    color: "#48484A",
-                    margin: 0,
-                    fontVariantNumeric: "tabular-nums",
+                {/* Header & Counter (Moved inside a top bar wrapper) */}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    maxWidth: "600px",
+                    marginBottom: "4vh",
                 }}>
-                    {revealed.filter(Boolean).length.toString().padStart(2, "0")} / {String(events.length).padStart(2, "0")}
-                </p>
+                    <p style={{
+                        fontSize: "11px",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "#48484A",
+                        margin: 0,
+                    }}>Schedule</p>
+                    <p style={{
+                        fontSize: "14px",
+                        color: "#48484A",
+                        margin: 0,
+                        fontVariantNumeric: "tabular-nums",
+                    }}>
+                        {revealed.filter(Boolean).length.toString().padStart(2, "0")} / {String(events.length).padStart(2, "0")}
+                    </p>
+                </div>
 
                 {/* Timeline body — flex row: [track] [events] */}
                 <div className="timeline-body-container" style={{
@@ -120,8 +120,8 @@ export default function Timeline() {
                     flexDirection: "row",
                     alignItems: "stretch",
                     width: "100%",
-                    maxWidth: "1000px",
-                    height: "min(820px, 85vh)",
+                    maxWidth: "600px",
+                    height: "min(800px, 80vh)", // Shrink slightly to avoid overflow
                     gap: 0,
                 }}>
                     {/* Left: vertical track */}
@@ -173,6 +173,7 @@ export default function Timeline() {
                         flexDirection: "column",
                         justifyContent: "space-between",
                         flex: 1,
+                        paddingBottom: "2vh", // small pad at the bottom to align the last dot cleanly
                     }}>
                         {events.map((ev, i) => {
                             const hit = revealed[i];
@@ -186,8 +187,8 @@ export default function Timeline() {
                                         transition: "opacity 0.3s ease",
                                     }}
                                 >
-                                    <span style={{
-                                        fontSize: "13px",
+                                    <span className="timeline-event-time" style={{
+                                        fontSize: "clamp(10px, 1.2vh, 13px)",
                                         fontWeight: 600,
                                         color: hit ? "#0A84FF" : "#48484A",
                                         letterSpacing: "0.15em",
@@ -199,7 +200,7 @@ export default function Timeline() {
                                         {ev.day} · {ev.time}
                                     </span>
                                     <span className="timeline-label-text" style={{
-                                        fontSize: "clamp(1.2rem, 3vw, 2.5rem)",
+                                        fontSize: "clamp(1.2rem, 3.5vh, 2.5rem)",
                                         fontWeight: 700,
                                         color: "#fff",
                                         letterSpacing: "-0.03em",
@@ -210,7 +211,7 @@ export default function Timeline() {
                                         {ev.label}
                                     </span>
                                     <span className="timeline-event-desc" style={{
-                                        fontSize: "15px",
+                                        fontSize: "clamp(12px, 1.5vh, 15px)",
                                         color: "#8E8E93",
                                         fontWeight: 400,
                                         display: "block",
@@ -251,7 +252,7 @@ export default function Timeline() {
                     }
                     .timeline-body-container {
                         height: 75vh !important;
-                        margin-top: 4vh !important;
+                        margin-top: 1vh !important;
                     }
                     .timeline-event-item {
                         margin-bottom: 2vh !important;
@@ -259,6 +260,10 @@ export default function Timeline() {
                     .timeline-event-desc {
                         font-size: 13px !important;
                         line-height: 1.4 !important;
+                    }
+                    .timeline-event-time {
+                        font-size: 11px !important;
+                        margin-bottom: 4px !important;
                     }
                 }
             `}</style>
