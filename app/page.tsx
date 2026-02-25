@@ -44,7 +44,7 @@ export default function Home() {
   }, []);
 
   // Each section's visible scroll window (0–1)
-  const heroOpacity = calcOpacity(scroll, 0, 0.04, 0.26, 0.33);
+  const heroOpacity = calcOpacity(scroll, 0, 0, 0.26, 0.33);
   const midOpacity = calcOpacity(scroll, 0.33, 0.37, 0.62, 0.68);
   const endOpacity = calcOpacity(scroll, 0.68, 0.72, 0.92, 1.0);
 
