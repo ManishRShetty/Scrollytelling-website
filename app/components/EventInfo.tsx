@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 const stats = [
     {
         eyebrow: "Venue",
-        value: "SIT",
+        value: "SSOSC Lab",
         description: "Srinivas Institute of Technology, Mangalore — the arena for HackMatrix.",
         secondary: "Organized by",
         secondaryBold: "Nexus SIT & CSBS",
@@ -102,14 +102,14 @@ export default function EventInfo() {
                             width: i === activeIndex ? "20px" : "6px",
                             height: "6px",
                             borderRadius: "3px",
-                            background: i === activeIndex ? "#0A84FF" : "#2C2C2E",
+                            background: i === activeIndex ? "#fff" : "#2C2C2E",
                             transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                         }} />
                     ))}
                 </div>
 
                 {/* Two-column layout */}
-                <div style={{
+                <div className="event-grid-container" style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
                     width: "100%",
@@ -119,7 +119,7 @@ export default function EventInfo() {
                     gap: "4vw",
                 }}>
                     {/* LEFT — big label */}
-                    <div style={{
+                    <div className="event-left-col" style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-start",
@@ -144,7 +144,7 @@ export default function EventInfo() {
                     </div>
 
                     {/* RIGHT — animated slide content */}
-                    <div style={{ width: "100%" }}>
+                    <div className="event-right-col" style={{ width: "100%" }}>
 
                         {/* Eyebrow */}
                         <p key={`ey-${activeIndex}-${entryKey}`} style={{
@@ -158,7 +158,7 @@ export default function EventInfo() {
                         </p>
 
                         {/* Big value */}
-                        <p key={`val-${activeIndex}-${entryKey}`} style={{
+                        <p className="event-big-val" key={`val-${activeIndex}-${entryKey}`} style={{
                             fontSize: "clamp(4rem, 12vw, 9rem)",
                             fontWeight: 700,
                             letterSpacing: "-0.05em",
@@ -197,7 +197,7 @@ export default function EventInfo() {
                                 position: "absolute",
                                 inset: "0 auto 0 0",
                                 width: `${((activeIndex + 1) / stats.length) * 100}%`,
-                                background: "linear-gradient(90deg, #0A84FF, rgba(10,132,255,0.3))",
+                                background: "#fff",
                                 transition: "width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                             }} />
                         </div>
@@ -264,6 +264,34 @@ export default function EventInfo() {
                         opacity: 1;
                         transform: scale(1) translateY(0);
                         filter: blur(0);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .event-grid-container {
+                        grid-template-columns: 1fr !important;
+                        grid-template-rows: min-content 1fr !important;
+                        align-content: flex-start !important;
+                        align-items: flex-start !important;
+                        padding: 15vh 6vw 0 !important;
+                        gap: 6vh !important;
+                    }
+                    .event-left-col {
+                        height: auto !important;
+                        margin-top: 0 !important;
+                        padding-bottom: 0 !important;
+                    }
+                    .event-right-col {
+                        margin-bottom: 0 !important;
+                    }
+                    .event-right-col p {
+                        margin-bottom: 20px !important;
+                    }
+                    .event-left-col p {
+                        font-size: clamp(3rem, 12vw, 7rem) !important;
+                    }
+                    .event-right-col .event-big-val {
+                        font-size: clamp(3rem, 15vw, 9rem) !important;
+                        margin-bottom: 16px !important;
                     }
                 }
             `}</style>

@@ -85,6 +85,7 @@ export default function RegisterCTA({ label = "Ready to build?" }: RegisterCTAPr
                 </p>
 
                 <button
+                    onClick={() => window.open('https://forms.gle/5aRY4QvSuNtfDvQ4A', '_blank')}
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
                     style={{

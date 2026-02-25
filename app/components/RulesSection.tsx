@@ -105,6 +105,7 @@ export default function RulesSection() {
             >
                 {/* Two-column layout */}
                 <div
+                    className="rules-grid-container"
                     style={{
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
@@ -116,13 +117,13 @@ export default function RulesSection() {
                     }}
                 >
                     {/* LEFT — animated slide content */}
-                    <div style={{ width: "100%" }}>
+                    <div className="rules-left-col" style={{ width: "100%" }}>
                         <p
                             key={`num-${activeIndex}-${entryKey}`}
                             style={{
                                 fontSize: "13px",
                                 fontWeight: 700,
-                                color: "#0A84FF",
+                                color: "#8E8E93",
                                 letterSpacing: "0.15em",
                                 margin: "0 0 16px 0",
                                 animation: "scaleReveal 0.7s cubic-bezier(0.16,1,0.3,1) both",
@@ -178,7 +179,7 @@ export default function RulesSection() {
                                     position: "absolute",
                                     inset: "0 auto 0 0",
                                     width: `${((activeIndex + 1) / rules.length) * 100}%`,
-                                    background: "linear-gradient(90deg, #0A84FF, rgba(10,132,255,0.4))",
+                                    background: "#fff",
                                     transition: "width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                                 }}
                             />
@@ -199,7 +200,7 @@ export default function RulesSection() {
                     </div>{/* end left column */}
 
                     {/* RIGHT — big label */}
-                    <div style={{
+                    <div className="rules-right-col" style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-end",
@@ -296,6 +297,33 @@ export default function RulesSection() {
                         opacity: 1;
                         transform: scale(1) translateY(0);
                         filter: blur(0);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .rules-grid-container {
+                        grid-template-columns: 1fr !important;
+                        grid-template-rows: min-content 1fr !important;
+                        align-content: flex-start !important;
+                        align-items: flex-start !important;
+                        padding: 15vh 8vw 0 !important;
+                        gap: 6vh !important;
+                    }
+                    .rules-right-col {
+                        justify-content: flex-start !important;
+                        align-items: flex-start !important;
+                        order: -1; /* Move title to top */
+                    }
+                    .rules-right-col p {
+                        text-align: left !important;
+                        font-size: clamp(3rem, 12vw, 7rem) !important;
+                    }
+                    .rules-left-col h2 {
+                        font-size: clamp(2rem, 8vw, 4.5rem) !important;
+                        margin-bottom: 16px !important;
+                    }
+                    .rules-left-col p {
+                        font-size: 1rem !important;
+                        margin-bottom: 24px !important;
                     }
                 }
             `}</style>

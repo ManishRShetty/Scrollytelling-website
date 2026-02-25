@@ -84,10 +84,10 @@ export default function Home() {
         }}
       >
         {/* ——— Hero ——— */}
-        <section style={{ ...fixedSection, opacity: heroOpacity }}>
+        <section className="mobile-padding" style={{ ...fixedSection, opacity: heroOpacity }}>
           <h1
             style={{
-              fontSize: "clamp(2.5rem, 6vw, 5rem)",
+              fontSize: "clamp(2rem, 8vw, 5rem)",
               fontWeight: 700,
               letterSpacing: "-0.03em",
               lineHeight: 1.1,
@@ -146,10 +146,10 @@ export default function Home() {
         </section>
 
         {/* ——— Mid ——— */}
-        <section style={{ ...fixedSection, opacity: midOpacity }}>
+        <section className="mobile-padding" style={{ ...fixedSection, opacity: midOpacity }}>
           <p
             style={{
-              fontSize: "clamp(1.4rem, 3vw, 2.2rem)",
+              fontSize: "clamp(1.4rem, 5vw, 2.2rem)",
               fontWeight: 300,
               color: "rgba(255,255,255,0.75)",
               maxWidth: "560px",
@@ -166,10 +166,10 @@ export default function Home() {
         </section>
 
         {/* ——— End ——— */}
-        <section style={{ ...fixedSection, opacity: endOpacity }}>
+        <section className="mobile-padding" style={{ ...fixedSection, opacity: endOpacity }}>
           <h2
             style={{
-              fontSize: "clamp(2rem, 5vw, 4rem)",
+              fontSize: "clamp(2rem, 8vw, 4rem)",
               fontWeight: 700,
               letterSpacing: "-0.03em",
               color: "white",
@@ -195,6 +195,11 @@ export default function Home() {
           0%, 100% { transform: translateY(0); }
           50%       { transform: translateY(8px); }
         }
+        @media (max-width: 768px) {
+          .mobile-padding {
+            padding: 0 1rem !important;
+          }
+        }
       `}</style>
 
       {/* Fixed Register Now button — fades in after video completes */}
@@ -211,6 +216,7 @@ export default function Home() {
         }}
       >
         <button
+          onClick={() => window.open('https://forms.gle/5aRY4QvSuNtfDvQ4A', '_blank')}
           onMouseEnter={() => setBtnHovered(true)}
           onMouseLeave={() => setBtnHovered(false)}
           style={{
@@ -229,6 +235,7 @@ export default function Home() {
             transition: "background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease",
             transform: btnHovered ? "scale(1.05)" : "scale(1)",
             fontFamily: "'Satoshi', Helvetica, Arial, sans-serif",
+            whiteSpace: "nowrap",
           }}
         >
           Register Now

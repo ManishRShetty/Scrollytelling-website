@@ -43,12 +43,12 @@ export default function Timeline() {
             const p = Math.max(0, Math.min(1, scrolled / total));
             setProgress(p);
 
-            // Reveal nodes as line passes them
-            const linePos = p * events.length; // how many nodes the line has passed
+            // Reveal nodes as line passes them (and hide if passed backwards)
+            const linePos = p * events.length;
             setRevealed(prev => {
                 const next = [...prev];
                 events.forEach((_, i) => {
-                    if (linePos >= i + 0.5 && !next[i]) next[i] = true;
+                    next[i] = linePos >= i + 0.5;
                 });
                 return next;
             });
@@ -72,6 +72,7 @@ export default function Timeline() {
 
             {/* Fixed overlay */}
             <div
+                className="timeline-paddings"
                 style={{
                     position: "fixed",
                     inset: 0,
@@ -104,8 +105,8 @@ export default function Timeline() {
                 <p style={{
                     position: "absolute",
                     bottom: "40px",
-                    right: "6vw",
-                    fontSize: "12px",
+                    right: "8vw",
+                    fontSize: "14px",
                     color: "#48484A",
                     margin: 0,
                     fontVariantNumeric: "tabular-nums",
@@ -114,21 +115,21 @@ export default function Timeline() {
                 </p>
 
                 {/* Timeline body — flex row: [track] [events] */}
-                <div style={{
+                <div className="timeline-body-container" style={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "stretch",
                     width: "100%",
-                    maxWidth: "720px",
-                    height: "min(600px, 80vh)",
+                    maxWidth: "1000px",
+                    height: "min(820px, 85vh)",
                     gap: 0,
                 }}>
                     {/* Left: vertical track */}
-                    <div style={{
+                    <div className="timeline-track-margin" style={{
                         position: "relative",
-                        width: "1px",
+                        width: "2px",
                         flexShrink: 0,
-                        marginRight: "36px",
+                        marginRight: "60px",
                         background: "#1C1C1E",
                     }}>
                         {/* Growing blue fill */}
@@ -136,7 +137,7 @@ export default function Timeline() {
                             position: "absolute",
                             top: 0,
                             left: 0,
-                            width: "1px",
+                            width: "2px",
                             height: `${lineHeightPct}%`,
                             background: "linear-gradient(180deg, #0A84FF, rgba(10,132,255,0.5))",
                             transition: "height 0.12s linear",
@@ -154,11 +155,11 @@ export default function Timeline() {
                                         left: "50%",
                                         top: `${pct}%`,
                                         transform: "translate(-50%, -50%)",
-                                        width: hit ? "10px" : "6px",
-                                        height: hit ? "10px" : "6px",
+                                        width: hit ? "16px" : "8px",
+                                        height: hit ? "16px" : "8px",
                                         borderRadius: "50%",
                                         background: hit ? "#0A84FF" : "#2C2C2E",
-                                        boxShadow: hit ? "0 0 10px rgba(10,132,255,0.9)" : "none",
+                                        boxShadow: hit ? "0 0 15px rgba(10,132,255,0.9)" : "none",
                                         transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
                                     }}
                                 />
@@ -177,6 +178,7 @@ export default function Timeline() {
                             const hit = revealed[i];
                             return (
                                 <div
+                                    className="timeline-event-item"
                                     key={`${i}-${hit}`}
                                     style={{
                                         opacity: hit ? 1 : 0.08,
@@ -185,32 +187,34 @@ export default function Timeline() {
                                     }}
                                 >
                                     <span style={{
-                                        fontSize: "11px",
+                                        fontSize: "13px",
                                         fontWeight: 600,
                                         color: hit ? "#0A84FF" : "#48484A",
-                                        letterSpacing: "0.1em",
+                                        letterSpacing: "0.15em",
                                         textTransform: "uppercase",
                                         display: "block",
-                                        marginBottom: "2px",
+                                        marginBottom: "6px",
                                         transition: "color 0.3s ease",
                                     }}>
                                         {ev.day} · {ev.time}
                                     </span>
-                                    <span style={{
-                                        fontSize: "clamp(0.95rem, 1.8vw, 1.25rem)",
+                                    <span className="timeline-label-text" style={{
+                                        fontSize: "clamp(1.2rem, 3vw, 2.5rem)",
                                         fontWeight: 700,
                                         color: "#fff",
-                                        letterSpacing: "-0.02em",
+                                        letterSpacing: "-0.03em",
                                         display: "block",
-                                        lineHeight: 1.15,
+                                        lineHeight: 1.1,
+                                        marginBottom: "6px",
                                     }}>
                                         {ev.label}
                                     </span>
-                                    <span style={{
-                                        fontSize: "12px",
-                                        color: "#636366",
+                                    <span className="timeline-event-desc" style={{
+                                        fontSize: "15px",
+                                        color: "#8E8E93",
                                         fontWeight: 400,
                                         display: "block",
+                                        maxWidth: "500px",
                                     }}>
                                         {ev.desc}
                                     </span>
@@ -232,6 +236,29 @@ export default function Timeline() {
                         opacity: 1;
                         transform: scale(1) translateY(0);
                         filter: blur(0);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .timeline-paddings {
+                        padding: 8vh 6vw 12vh 6vw !important;
+                        justify-content: flex-start !important;
+                    }
+                    .timeline-track-margin {
+                        margin-right: 24px !important;
+                    }
+                    .timeline-label-text {
+                        font-size: clamp(1.4rem, 6vw, 2.5rem) !important;
+                    }
+                    .timeline-body-container {
+                        height: 75vh !important;
+                        margin-top: 4vh !important;
+                    }
+                    .timeline-event-item {
+                        margin-bottom: 2vh !important;
+                    }
+                    .timeline-event-desc {
+                        font-size: 13px !important;
+                        line-height: 1.4 !important;
                     }
                 }
             `}</style>
