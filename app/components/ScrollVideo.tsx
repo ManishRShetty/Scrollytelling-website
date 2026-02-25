@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-const TOTAL_FRAMES = 40;
+const TOTAL_FRAMES = 120;
 
 function getFramePath(index: number): string {
   const num = String(index + 1).padStart(3, "0");

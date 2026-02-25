@@ -142,9 +142,7 @@ export default function Home() {
               fontSize: "clamp(2rem, 5vw, 4rem)",
               fontWeight: 700,
               letterSpacing: "-0.03em",
-              background: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              color: "white",
             }}
           >
             The End
