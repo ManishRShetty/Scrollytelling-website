@@ -1,78 +1,73 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import ScrollVideo from "./components/ScrollVideo";
 
-function useFadeIn() {
-  const ref = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-          el.style.filter = "blur(0px)";
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.25 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return ref;
+/** Maps scroll progress [0–1] to opacity using enter/peak/exit/leave thresholds */
+function calcOpacity(
+  p: number,
+  enter: number,
+  peak: number,
+  exit: number,
+  leave: number
+): number {
+  if (p < enter) return 0;
+  if (p < peak) return (p - enter) / (peak - enter);
+  if (p < exit) return 1;
+  if (p < leave) return 1 - (p - exit) / (leave - exit);
+  return 0;
 }
 
-const fadeStyle: React.CSSProperties = {
-  opacity: 0,
-  transform: "translateY(28px)",
-  filter: "blur(8px)",
-  transition:
-    "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-};
-
-const fadeStyleDelayed: React.CSSProperties = {
-  ...fadeStyle,
-  transitionDelay: "0.15s",
+const fixedSection: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  padding: "0 2rem",
+  transition: "opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
 };
 
 export default function Home() {
-  const heroH1 = useFadeIn();
-  const heroP = useFadeIn();
-  const heroScroll = useFadeIn();
+  const [scroll, setScroll] = useState(0);
 
-  const midP = useFadeIn();
+  useEffect(() => {
+    const onScroll = () => {
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      setScroll(maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const endH2 = useFadeIn();
-  const endP = useFadeIn();
+  // Each section's visible scroll window (0–1)
+  const heroOpacity = calcOpacity(scroll, 0, 0.04, 0.26, 0.33);
+  const midOpacity = calcOpacity(scroll, 0.33, 0.37, 0.62, 0.68);
+  const endOpacity = calcOpacity(scroll, 0.68, 0.72, 0.92, 1.0);
 
   return (
     <>
       <ScrollVideo />
 
-      <div style={{ position: "relative", zIndex: 1 }}>
-        {/* ——— Section 1: Hero ——— */}
-        <section
-          style={{
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            padding: "0 2rem",
-          }}
-        >
+      {/* Tall spacer drives scroll length */}
+      <div style={{ height: "400vh" }} />
+
+      {/* Fixed overlay — all sections live here */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 10,
+          pointerEvents: "none",
+        }}
+      >
+        {/* ——— Hero ——— */}
+        <section style={{ ...fixedSection, opacity: heroOpacity }}>
           <h1
-            ref={heroH1 as React.RefObject<HTMLHeadingElement>}
             style={{
-              ...fadeStyle,
               fontSize: "clamp(2.5rem, 6vw, 5rem)",
               fontWeight: 700,
               letterSpacing: "-0.03em",
@@ -86,9 +81,7 @@ export default function Home() {
             Scroll to Explore
           </h1>
           <p
-            ref={heroP as React.RefObject<HTMLParagraphElement>}
             style={{
-              ...fadeStyleDelayed,
               marginTop: "1.5rem",
               fontSize: "1.15rem",
               fontWeight: 300,
@@ -102,9 +95,7 @@ export default function Home() {
 
           {/* Scroll indicator */}
           <div
-            ref={heroScroll as React.RefObject<HTMLDivElement>}
             style={{
-              ...{ ...fadeStyle, transitionDelay: "0.3s" },
               position: "absolute",
               bottom: "3rem",
               display: "flex",
@@ -124,53 +115,22 @@ export default function Home() {
             >
               Scroll
             </span>
-            <svg
-              width="20"
-              height="28"
-              viewBox="0 0 20 28"
-              fill="none"
-              style={{ opacity: 0.3 }}
-            >
-              <rect
-                x="1"
-                y="1"
-                width="18"
-                height="26"
-                rx="9"
-                stroke="white"
-                strokeWidth="1.5"
-              />
+            <svg width="20" height="28" viewBox="0 0 20 28" fill="none" style={{ opacity: 0.3 }}>
+              <rect x="1" y="1" width="18" height="26" rx="9" stroke="white" strokeWidth="1.5" />
               <circle cx="10" cy="8" r="2.5" fill="white">
-                <animate
-                  attributeName="cy"
-                  values="8;18;8"
-                  dur="2s"
-                  repeatCount="indefinite"
-                />
+                <animate attributeName="cy" values="8;18;8" dur="2s" repeatCount="indefinite" />
               </circle>
             </svg>
           </div>
         </section>
 
-        {/* ——— Section 2: Mid-scroll text ——— */}
-        <section
-          style={{
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            padding: "0 2rem",
-          }}
-        >
+        {/* ——— Mid ——— */}
+        <section style={{ ...fixedSection, opacity: midOpacity }}>
           <p
-            ref={midP as React.RefObject<HTMLParagraphElement>}
             style={{
-              ...fadeStyle,
               fontSize: "clamp(1.4rem, 3vw, 2.2rem)",
               fontWeight: 300,
-              color: "rgba(255,255,255,0.7)",
+              color: "rgba(255,255,255,0.75)",
               maxWidth: "560px",
               lineHeight: 1.5,
               letterSpacing: "-0.01em",
@@ -184,22 +144,10 @@ export default function Home() {
           </p>
         </section>
 
-        {/* ——— Section 3: End ——— */}
-        <section
-          style={{
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            padding: "0 2rem",
-          }}
-        >
+        {/* ——— End ——— */}
+        <section style={{ ...fixedSection, opacity: endOpacity }}>
           <h2
-            ref={endH2 as React.RefObject<HTMLHeadingElement>}
             style={{
-              ...fadeStyle,
               fontSize: "clamp(2rem, 5vw, 4rem)",
               fontWeight: 700,
               letterSpacing: "-0.03em",
@@ -209,9 +157,7 @@ export default function Home() {
             The Black Hole.
           </h2>
           <p
-            ref={endP as React.RefObject<HTMLParagraphElement>}
             style={{
-              ...fadeStyleDelayed,
               marginTop: "1rem",
               fontSize: "1rem",
               color: "rgba(255,255,255,0.4)",
@@ -223,11 +169,10 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Keyframes */}
       <style>{`
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(8px); }
+          50%       { transform: translateY(8px); }
         }
       `}</style>
     </>
