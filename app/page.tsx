@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ScrollVideo from "./components/ScrollVideo";
 import RulesSection from "./components/RulesSection";
+import Timeline from "./components/Timeline";
 import EventInfo from "./components/EventInfo";
 import Footer from "./components/Footer";
 import RegisterCTA from "./components/RegisterCTA";
@@ -245,6 +246,11 @@ export default function Home() {
       {/* Rules section */}
       <div style={{ position: "relative", zIndex: 20 }}>
         <RulesSection />
+      </div>
+
+      {/* Timeline section */}
+      <div style={{ position: "relative", zIndex: 20 }}>
+        <Timeline />
       </div>
 
       {/* Register CTA — after all sections */}
