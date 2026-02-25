@@ -159,12 +159,12 @@ export default function EventInfo() {
 
                         {/* Big value */}
                         <p className="event-big-val" key={`val-${activeIndex}-${entryKey}`} style={{
-                            fontSize: "clamp(4rem, 12vw, 9rem)",
+                            fontSize: "clamp(2.5rem, 6vw, 4.5rem)", // Matched with rule.title
                             fontWeight: 700,
-                            letterSpacing: "-0.05em",
+                            letterSpacing: "-0.04em", // Matched with rule.title
                             color: "#fff",
-                            margin: "0 0 28px 0",
-                            lineHeight: 1,
+                            margin: "0 0 24px 0", // Matched with rule.title
+                            lineHeight: 1.05, // Matched with rule.title
                             animation: "scaleReveal 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both",
                         }}>
                             {s.value}

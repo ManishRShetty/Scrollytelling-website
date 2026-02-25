@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AudioProvider } from "./components/AudioPlayer";
 
 export const metadata: Metadata = {
   title: "HackMatrix hackathon by nexus",
@@ -20,7 +21,11 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AudioProvider>
+          {children}
+        </AudioProvider>
+      </body>
     </html>
   );
 }

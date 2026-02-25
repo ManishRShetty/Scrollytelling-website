@@ -28,25 +28,30 @@ export default function Footer() {
                 >
                     {/* Logos */}
                     <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                            <a
-                                href="https://www.nexusclubs.in"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    width: "48px",
-                                    height: "48px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    cursor: "pointer",
-                                    transition: "opacity 0.2s ease",
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.opacity = "0.7"}
-                                onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
-                            >
+                        <a
+                            href="https://www.nexusclubs.in"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "12px",
+                                textDecoration: "none",
+                                cursor: "pointer",
+                                transition: "opacity 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.opacity = "0.7"}
+                            onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+                        >
+                            <div style={{
+                                width: "48px",
+                                height: "48px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
                                 <img src="/nexus.svg" alt="Nexus Logo" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
-                            </a>
+                            </div>
                             <span style={{
                                 fontSize: "14px",
                                 fontWeight: 600,
@@ -55,7 +60,7 @@ export default function Footer() {
                             }}>
                                 NEXUS SIT
                             </span>
-                        </div>
+                        </a>
 
                         {/* Divider */}
                         <div style={{ width: "1px", height: "24px", background: "#3A3A3C" }} />

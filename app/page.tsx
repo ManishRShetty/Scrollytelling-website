@@ -7,6 +7,7 @@ import Timeline from "./components/Timeline";
 import EventInfo from "./components/EventInfo";
 import Footer from "./components/Footer";
 import RegisterCTA from "./components/RegisterCTA";
+import { AudioToggle } from "./components/AudioPlayer";
 
 /** Maps scroll progress [0–1] to opacity using enter/peak/exit/leave thresholds */
 function calcOpacity(
@@ -241,6 +242,8 @@ export default function Home() {
           Register Now
         </button>
       </div>
+
+      <AudioToggle />
 
       {/* 100vh buffer — lets video text fully fade before EventInfo appears
       <div style={{ height: "100vh", background: "#000", position: "relative", zIndex: 20 }} /> */}
