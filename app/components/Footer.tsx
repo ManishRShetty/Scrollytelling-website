@@ -9,8 +9,7 @@ export default function Footer() {
             style={{
                 background: "#000",
                 borderTop: "1px solid #1C1C1E",
-                fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
+                fontFamily: "'Satoshi', Helvetica, Arial, sans-serif",
                 padding: "60px 24px 40px",
             }}
         >

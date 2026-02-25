@@ -227,7 +227,7 @@ export default function Home() {
               : "0 0 24px rgba(10,132,255,0.3)",
             transition: "background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease",
             transform: btnHovered ? "scale(1.05)" : "scale(1)",
-            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+            fontFamily: "'Satoshi', Helvetica, Arial, sans-serif",
           }}
         >
           Register Now

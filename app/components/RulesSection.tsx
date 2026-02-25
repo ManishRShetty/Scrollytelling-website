@@ -88,143 +88,129 @@ export default function RulesSection() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontFamily:
-                        "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
+                    fontFamily: "'Satoshi', Helvetica, Arial, sans-serif",
                     opacity: visible ? 1 : 0,
                     transition: "opacity 0.4s ease",
                     background: visible ? "#000" : "transparent",
                 }}
             >
-                {/* Section label */}
-                <p
-                    style={{
-                        position: "absolute",
-                        top: "40px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        fontSize: "11px",
-                        letterSpacing: "0.2em",
-                        textTransform: "uppercase",
-                        color: "#48484A",
-                        margin: 0,
-                        whiteSpace: "nowrap",
-                    }}
-                >
-                    Rules &amp; Format
-                </p>
-
-                {/* Progress dots */}
+                {/* Two-column layout */}
                 <div
                     style={{
-                        position: "absolute",
-                        top: "44px",
-                        right: "48px",
-                        display: "flex",
-                        gap: "6px",
-                    }}
-                >
-                    {rules.map((_, i) => (
-                        <div
-                            key={i}
-                            style={{
-                                width: i === activeIndex ? "20px" : "6px",
-                                height: "6px",
-                                borderRadius: "3px",
-                                background: i === activeIndex ? "#0A84FF" : "#2C2C2E",
-                                transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-                            }}
-                        />
-                    ))}
-                </div>
-
-                {/* Main content */}
-                <div
-                    style={{
-                        maxWidth: "640px",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
                         width: "100%",
-                        padding: "0 32px",
-                        textAlign: "left",
+                        height: "100%",
+                        alignItems: "center",
+                        padding: "0 6vw",
+                        gap: "4vw",
                     }}
                 >
-                    <p
-                        key={`num-${activeIndex}`}
-                        style={{
-                            fontSize: "13px",
-                            fontWeight: 700,
-                            color: "#0A84FF",
-                            letterSpacing: "0.15em",
-                            margin: "0 0 16px 0",
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both",
-                        }}
-                    >
-                        {rule.number}
-                    </p>
+                    {/* LEFT — animated slide content */}
+                    <div style={{ width: "100%" }}>
+                        <p
+                            key={`num-${activeIndex}`}
+                            style={{
+                                fontSize: "13px",
+                                fontWeight: 700,
+                                color: "#0A84FF",
+                                letterSpacing: "0.15em",
+                                margin: "0 0 16px 0",
+                                animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both",
+                            }}
+                        >
+                            {rule.number}
+                        </p>
 
-                    <h2
-                        key={`title-${activeIndex}`}
-                        style={{
-                            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                            fontWeight: 700,
-                            letterSpacing: "-0.04em",
-                            color: "#fff",
-                            margin: "0 0 24px 0",
-                            lineHeight: 1.05,
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both",
-                        }}
-                    >
-                        {rule.title}
-                    </h2>
+                        <h2
+                            key={`title-${activeIndex}`}
+                            style={{
+                                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                                fontWeight: 700,
+                                letterSpacing: "-0.04em",
+                                color: "#fff",
+                                margin: "0 0 24px 0",
+                                lineHeight: 1.05,
+                                animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both",
+                            }}
+                        >
+                            {rule.title}
+                        </h2>
 
-                    <p
-                        key={`body-${activeIndex}`}
-                        style={{
-                            fontSize: "1.1rem",
-                            color: "#8E8E93",
-                            lineHeight: 1.7,
-                            margin: "0 0 36px 0",
-                            fontWeight: 400,
-                            maxWidth: "520px",
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s both",
-                        }}
-                    >
-                        {rule.body}
-                    </p>
+                        <p
+                            key={`body-${activeIndex}`}
+                            style={{
+                                fontSize: "1.1rem",
+                                color: "#8E8E93",
+                                lineHeight: 1.7,
+                                margin: "0 0 36px 0",
+                                fontWeight: 400,
+                                maxWidth: "520px",
+                                animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s both",
+                            }}
+                        >
+                            {rule.body}
+                        </p>
 
-                    {/* Growing progress bar */}
-                    <div
-                        style={{
-                            height: "2px",
-                            background: "#1C1C1E",
-                            borderRadius: "2px",
-                            marginBottom: "24px",
-                            position: "relative",
-                            overflow: "hidden",
-                        }}
-                    >
+                        {/* Growing progress bar */}
                         <div
                             style={{
-                                position: "absolute",
-                                inset: "0 auto 0 0",
-                                width: `${((activeIndex + 1) / rules.length) * 100}%`,
-                                background: "linear-gradient(90deg, #0A84FF, rgba(10,132,255,0.4))",
-                                transition: "width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                                height: "2px",
+                                background: "#1C1C1E",
+                                borderRadius: "2px",
+                                marginBottom: "24px",
+                                position: "relative",
+                                overflow: "hidden",
+                                maxWidth: "480px",
                             }}
-                        />
-                    </div>
+                        >
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    inset: "0 auto 0 0",
+                                    width: `${((activeIndex + 1) / rules.length) * 100}%`,
+                                    background: "linear-gradient(90deg, #0A84FF, rgba(10,132,255,0.4))",
+                                    transition: "width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                                }}
+                            />
+                        </div>
 
-                    <p
-                        key={`detail-${activeIndex}`}
-                        style={{
-                            fontSize: "13px",
-                            color: "#636366",
-                            fontWeight: 500,
+                        <p
+                            key={`detail-${activeIndex}`}
+                            style={{
+                                fontSize: "13px",
+                                color: "#636366",
+                                fontWeight: 500,
+                                margin: 0,
+                                animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both",
+                            }}
+                        >
+                            {rule.detail}
+                        </p>
+                    </div>{/* end left column */}
+
+                    {/* RIGHT — big label */}
+                    <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                        height: "100%",
+                    }}>
+                        <p style={{
+                            fontSize: "clamp(3rem, 8vw, 7rem)",
+                            fontWeight: 800,
+                            letterSpacing: "-0.05em",
+                            lineHeight: 0.9,
+                            color: "#1C1C1E",
                             margin: 0,
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both",
-                        }}
-                    >
-                        {rule.detail}
-                    </p>
-                </div>
+                            userSelect: "none",
+                            textTransform: "uppercase",
+                            textAlign: "right",
+                        }}>
+                            Rules &amp; Format
+                        </p>
+                    </div>{/* end right column */}
+                </div>{/* end two-column grid */}
 
                 {/* Scroll hint */}
                 {activeIndex === 0 && (

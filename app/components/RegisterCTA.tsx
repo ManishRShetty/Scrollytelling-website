@@ -14,8 +14,7 @@ export default function RegisterCTA({ label = "Ready to build?" }: RegisterCTAPr
         <section
             style={{
                 background: "#000",
-                fontFamily:
-                    "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
+                fontFamily: "'Satoshi', Helvetica, Arial, sans-serif",
                 padding: "100px 24px",
                 display: "flex",
                 flexDirection: "column",
