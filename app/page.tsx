@@ -245,7 +245,7 @@ export default function Home() {
       </div>
 
       {/* Register CTA — after all sections */}
-      <div ref={ctaRef} style={{ position: "relative", zIndex: 20 }}>
+      <div ref={ctaRef} style={{ position: "relative", zIndex: 21 }}>
         <RegisterCTA label="What are you waiting for?" />
       </div>
 
