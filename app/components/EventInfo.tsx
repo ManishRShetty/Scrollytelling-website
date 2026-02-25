@@ -5,8 +5,8 @@ import React, { useEffect, useRef, useState } from "react";
 const stats = [
     {
         eyebrow: "Venue",
-        value: "SSOSC",
-        description: "Sri Siddhartha College of Engineering, the arena for HackMatrix.",
+        value: "SIT",
+        description: "Srinivas Institute of Technology, Mangalore — the arena for HackMatrix.",
         secondary: "Organized by",
         secondaryBold: "Nexus SIT & CSBS",
     },
@@ -125,16 +125,20 @@ export default function EventInfo() {
                         justifyContent: "flex-start",
                         height: "100%",
                     }}>
-                        <p style={{
-                            fontSize: "clamp(3rem, 8vw, 7rem)",
-                            fontWeight: 800,
-                            letterSpacing: "-0.05em",
-                            lineHeight: 0.9,
-                            color: "#1C1C1E",
-                            margin: 0,
-                            userSelect: "none",
-                            textTransform: "uppercase",
-                        }}>
+                        <p
+                            key={`label-${entryKey}`}
+                            style={{
+                                fontSize: "clamp(3rem, 8vw, 7rem)",
+                                fontWeight: 800,
+                                letterSpacing: "-0.05em",
+                                lineHeight: 0.9,
+                                color: "#1C1C1E",
+                                margin: 0,
+                                userSelect: "none",
+                                textTransform: "uppercase",
+                                animation: "slideLeft 0.9s cubic-bezier(0.16,1,0.3,1) both",
+                            }}
+                        >
                             Event<br />Details
                         </p>
                     </div>
@@ -161,7 +165,7 @@ export default function EventInfo() {
                             color: "#fff",
                             margin: "0 0 28px 0",
                             lineHeight: 1,
-                            animation: "fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.08s both",
+                            animation: "scaleReveal 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both",
                         }}>
                             {s.value}
                         </p>
@@ -235,6 +239,30 @@ export default function EventInfo() {
                     to {
                         opacity: 1;
                         transform: translateY(0);
+                        filter: blur(0);
+                    }
+                }
+                @keyframes slideLeft {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-60px);
+                        filter: blur(8px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                        filter: blur(0);
+                    }
+                }
+                @keyframes scaleReveal {
+                    from {
+                        opacity: 0;
+                        transform: scale(1.18) translateY(12px);
+                        filter: blur(12px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
                         filter: blur(0);
                     }
                 }

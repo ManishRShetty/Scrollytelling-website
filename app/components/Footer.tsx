@@ -73,7 +73,7 @@ export default function Footer() {
                     }}
                 >
                     <p style={{ fontSize: "12px", color: "#48484A", margin: 0 }}>
-                        2 – 3 Feb · SSOSC · 9:30 AM
+                        2 – 3 Feb · SIT · 9:30 AM
                     </p>
                     <p style={{ fontSize: "12px", color: "#48484A", margin: 0 }}>
                         &copy; {new Date().getFullYear()} HackMatrix. All rights reserved.

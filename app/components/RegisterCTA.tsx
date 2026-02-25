@@ -81,7 +81,7 @@ export default function RegisterCTA({ label = "Ready to build?" }: RegisterCTAPr
                     fontWeight: 400,
                     animation: visible ? "fadeUp 0.5s ease 0.1s both" : "none",
                 }}>
-                    2 – 3 Feb · SSOSC · 9:30 AM
+                    2 – 3 Feb · SIT · 9:30 AM
                 </p>
 
                 <button

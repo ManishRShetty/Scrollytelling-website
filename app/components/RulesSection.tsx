@@ -39,6 +39,8 @@ export default function RulesSection() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [visible, setVisible] = useState(false);
+    const [entryKey, setEntryKey] = useState(0);
+    const prevVisible = useRef(false);
 
     useEffect(() => {
         const onScroll = () => {
@@ -59,9 +61,16 @@ export default function RulesSection() {
         };
 
         window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll(); // run once on mount
+        onScroll();
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
+
+    useEffect(() => {
+        if (visible && !prevVisible.current) {
+            setEntryKey(k => k + 1);
+        }
+        prevVisible.current = visible;
+    }, [visible]);
 
     const rule = rules[activeIndex];
 
@@ -109,21 +118,21 @@ export default function RulesSection() {
                     {/* LEFT — animated slide content */}
                     <div style={{ width: "100%" }}>
                         <p
-                            key={`num-${activeIndex}`}
+                            key={`num-${activeIndex}-${entryKey}`}
                             style={{
                                 fontSize: "13px",
                                 fontWeight: 700,
                                 color: "#0A84FF",
                                 letterSpacing: "0.15em",
                                 margin: "0 0 16px 0",
-                                animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both",
+                                animation: "scaleReveal 0.7s cubic-bezier(0.16,1,0.3,1) both",
                             }}
                         >
                             {rule.number}
                         </p>
 
                         <h2
-                            key={`title-${activeIndex}`}
+                            key={`title-${activeIndex}-${entryKey}`}
                             style={{
                                 fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
                                 fontWeight: 700,
@@ -131,7 +140,7 @@ export default function RulesSection() {
                                 color: "#fff",
                                 margin: "0 0 24px 0",
                                 lineHeight: 1.05,
-                                animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both",
+                                animation: "scaleReveal 0.7s cubic-bezier(0.16,1,0.3,1) 0.08s both",
                             }}
                         >
                             {rule.title}
@@ -196,17 +205,21 @@ export default function RulesSection() {
                         justifyContent: "flex-end",
                         height: "100%",
                     }}>
-                        <p style={{
-                            fontSize: "clamp(3rem, 8vw, 7rem)",
-                            fontWeight: 800,
-                            letterSpacing: "-0.05em",
-                            lineHeight: 0.9,
-                            color: "#1C1C1E",
-                            margin: 0,
-                            userSelect: "none",
-                            textTransform: "uppercase",
-                            textAlign: "right",
-                        }}>
+                        <p
+                            key={`rules-label-${entryKey}`}
+                            style={{
+                                fontSize: "clamp(3rem, 8vw, 7rem)",
+                                fontWeight: 800,
+                                letterSpacing: "-0.05em",
+                                lineHeight: 0.9,
+                                color: "#1C1C1E",
+                                margin: 0,
+                                userSelect: "none",
+                                textTransform: "uppercase",
+                                textAlign: "right",
+                                animation: "slideRight 0.9s cubic-bezier(0.16,1,0.3,1) both",
+                            }}
+                        >
                             Rules &amp; Format
                         </p>
                     </div>{/* end right column */}
@@ -249,11 +262,43 @@ export default function RulesSection() {
             </div>
 
             <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(18px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
+                @keyframes fadeUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(28px);
+                        filter: blur(6px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                        filter: blur(0);
+                    }
+                }
+                @keyframes slideRight {
+                    from {
+                        opacity: 0;
+                        transform: translateX(60px);
+                        filter: blur(8px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                        filter: blur(0);
+                    }
+                }
+                @keyframes scaleReveal {
+                    from {
+                        opacity: 0;
+                        transform: scale(1.18) translateY(12px);
+                        filter: blur(12px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
+                        filter: blur(0);
+                    }
+                }
+            `}</style>
         </>
     );
 }
