@@ -30,6 +30,8 @@ export default function EventInfo() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [visible, setVisible] = useState(false);
+    const [entryKey, setEntryKey] = useState(0);
+    const prevVisible = useRef(false);
 
     useEffect(() => {
         const onScroll = () => {
@@ -56,6 +58,14 @@ export default function EventInfo() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
+    // Bump entryKey every time section becomes visible (false → true)
+    useEffect(() => {
+        if (visible && !prevVisible.current) {
+            setEntryKey(k => k + 1);
+        }
+        prevVisible.current = visible;
+    }, [visible]);
+
     const s = stats[activeIndex];
 
     return (
@@ -63,7 +73,7 @@ export default function EventInfo() {
             {/* Scroll driver — 3 slides × 100vh */}
             <div
                 ref={containerRef}
-                style={{ position: "relative", height: `${stats.length * 100 + 100}vh`, background: "#000" }}
+                style={{ position: "relative", height: `${stats.length * 100 + 100}vh` }}
             />
 
             {/* Fixed overlay */}
@@ -133,38 +143,38 @@ export default function EventInfo() {
                     <div style={{ width: "100%" }}>
 
                         {/* Eyebrow */}
-                        <p key={`ey-${activeIndex}`} style={{
+                        <p key={`ey-${activeIndex}-${entryKey}`} style={{
                             fontSize: "14px",
                             color: "#8E8E93",
                             fontWeight: 400,
                             margin: "0 0 12px 0",
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) both",
+                            animation: "fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) both",
                         }}>
                             {s.eyebrow}
                         </p>
 
                         {/* Big value */}
-                        <p key={`val-${activeIndex}`} style={{
+                        <p key={`val-${activeIndex}-${entryKey}`} style={{
                             fontSize: "clamp(4rem, 12vw, 9rem)",
                             fontWeight: 700,
                             letterSpacing: "-0.05em",
                             color: "#fff",
                             margin: "0 0 28px 0",
                             lineHeight: 1,
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both",
+                            animation: "fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.08s both",
                         }}>
                             {s.value}
                         </p>
 
                         {/* Description */}
-                        <p key={`desc-${activeIndex}`} style={{
+                        <p key={`desc-${activeIndex}-${entryKey}`} style={{
                             fontSize: "1.1rem",
                             color: "#636366",
                             lineHeight: 1.65,
                             margin: "0 0 32px 0",
                             fontWeight: 400,
                             maxWidth: "480px",
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s both",
+                            animation: "fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both",
                         }}>
                             {s.description}
                         </p>
@@ -189,11 +199,11 @@ export default function EventInfo() {
                         </div>
 
                         {/* Secondary */}
-                        <p key={`sec-${activeIndex}`} style={{
+                        <p key={`sec-${activeIndex}-${entryKey}`} style={{
                             fontSize: "14px",
                             color: "#8E8E93",
                             margin: 0,
-                            animation: "fadeUp 0.45s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both",
+                            animation: "fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.22s both",
                         }}>
                             {s.secondary}{" "}
                             <span style={{ color: "#fff", fontWeight: 600 }}>{s.secondaryBold}</span>
@@ -217,8 +227,16 @@ export default function EventInfo() {
 
             <style>{`
                 @keyframes fadeUp {
-                    from { opacity: 0; transform: translateY(18px); }
-                    to   { opacity: 1; transform: translateY(0); }
+                    from {
+                        opacity: 0;
+                        transform: translateY(28px);
+                        filter: blur(6px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                        filter: blur(0);
+                    }
                 }
             `}</style>
         </>

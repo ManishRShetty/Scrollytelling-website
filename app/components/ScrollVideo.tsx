@@ -16,6 +16,7 @@ export default function ScrollVideo() {
   const rafRef = useRef<number | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [canvasOpacity, setCanvasOpacity] = useState(1);
 
   // Draw a single frame on the canvas with cover-fit
   const drawFrame = useCallback((frameIndex: number) => {
@@ -80,9 +81,14 @@ export default function ScrollVideo() {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         const scrollTop = window.scrollY;
-        const maxScroll =
-          document.documentElement.scrollHeight - window.innerHeight;
+        const maxScroll = 4 * window.innerHeight; // clamp to the 400vh video spacer only
         const scrollFraction = Math.min(scrollTop / maxScroll, 1);
+
+        // Fade canvas out over 200vh after video section ends (slow dissolve)
+        const fadeOver = 2 * window.innerHeight;
+        const extra = scrollTop - maxScroll;
+        const opacity = extra <= 0 ? 1 : Math.max(0, 1 - extra / fadeOver);
+        setCanvasOpacity(opacity);
         const frameIndex = Math.min(
           Math.floor(scrollFraction * TOTAL_FRAMES),
           TOTAL_FRAMES - 1
@@ -182,6 +188,8 @@ export default function ScrollVideo() {
           width: "100vw",
           height: "100vh",
           zIndex: 0,
+          opacity: canvasOpacity,
+          transition: "opacity 0.1s linear",
         }}
       />
     </>

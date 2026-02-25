@@ -234,6 +234,9 @@ export default function Home() {
         </button>
       </div>
 
+      {/* 100vh buffer — lets video text fully fade before EventInfo appears
+      <div style={{ height: "100vh", background: "#000", position: "relative", zIndex: 20 }} /> */}
+
       {/* Event info — venue, date, time */}
       <div style={{ position: "relative", zIndex: 20 }}>
         <EventInfo />
