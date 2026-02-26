@@ -12,11 +12,11 @@ function getFramePath(index: number): string {
 export default function ScrollVideo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
-  const currentFrameRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
+  const targetFrameRef = useRef(0);
+  const currentFrameInterpolatedRef = useRef(0);
+  const lastDrawnFrameRef = useRef(-1);
   const [loaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [canvasOpacity, setCanvasOpacity] = useState(1);
 
   // Draw a single frame on the canvas with cover-fit
   const drawFrame = useCallback((frameIndex: number) => {
@@ -48,7 +48,7 @@ export default function ScrollVideo() {
     if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    drawFrame(currentFrameRef.current);
+    drawFrame(Math.max(0, lastDrawnFrameRef.current));
   }, [drawFrame]);
 
   // Preload all frames
@@ -77,28 +77,43 @@ export default function ScrollVideo() {
 
     resizeCanvas();
 
+    let animationFrameId: number;
+
+    const renderLoop = () => {
+      // Smooth interpolation using lerp (Linear Interpolation) with a factor of 0.08
+      currentFrameInterpolatedRef.current +=
+        (targetFrameRef.current - currentFrameInterpolatedRef.current) * 0.08;
+
+      const frameToDraw = Math.round(currentFrameInterpolatedRef.current);
+
+      // Only draw if we hit a new frame to save rendering time
+      if (frameToDraw !== lastDrawnFrameRef.current) {
+        drawFrame(frameToDraw);
+        lastDrawnFrameRef.current = frameToDraw;
+      }
+
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
+
     const handleScroll = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        const scrollTop = window.scrollY;
-        const maxScroll = 4 * window.innerHeight; // clamp to the 400vh video spacer only
-        const scrollFraction = Math.min(scrollTop / maxScroll, 1);
+      const scrollTop = window.scrollY;
+      const maxScroll = 4 * window.innerHeight; // clamp to the 400vh video spacer only
+      const scrollFraction = Math.min(scrollTop / maxScroll, 1);
 
-        // Fade canvas out over 200vh after video section ends (slow dissolve)
-        const fadeOver = 2 * window.innerHeight;
-        const extra = scrollTop - maxScroll;
-        const opacity = extra <= 0 ? 1 : Math.max(0, 1 - extra / fadeOver);
-        setCanvasOpacity(opacity);
-        const frameIndex = Math.min(
-          Math.floor(scrollFraction * TOTAL_FRAMES),
-          TOTAL_FRAMES - 1
-        );
+      // Fade canvas out over 200vh after video section ends (slow dissolve)
+      const fadeOver = 2 * window.innerHeight;
+      const extra = scrollTop - maxScroll;
+      const opacity = extra <= 0 ? 1 : Math.max(0, 1 - extra / fadeOver);
 
-        if (frameIndex !== currentFrameRef.current) {
-          currentFrameRef.current = frameIndex;
-          drawFrame(frameIndex);
-        }
-      });
+      // Avoid React state updates for fast CSS property change during scroll
+      if (canvasRef.current) {
+        canvasRef.current.style.opacity = opacity.toString();
+      }
+
+      targetFrameRef.current = Math.min(
+        Math.floor(scrollFraction * TOTAL_FRAMES),
+        TOTAL_FRAMES - 1
+      );
     };
 
     const handleResize = () => resizeCanvas();
@@ -106,13 +121,14 @@ export default function ScrollVideo() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);
 
-    // Draw first frame
-    drawFrame(0);
+    // Initial state calculation and start loop
+    handleScroll();
+    renderLoop();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [loaded, drawFrame, resizeCanvas]);
 
@@ -188,8 +204,7 @@ export default function ScrollVideo() {
           width: "100vw",
           height: "100vh",
           zIndex: 0,
-          opacity: canvasOpacity,
-          transition: "opacity 0.1s linear",
+          opacity: 1, // Will be dynamically updated via ref in scroll handler
         }}
       />
     </>
